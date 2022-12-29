@@ -1,14 +1,28 @@
-import { StyleSheet, Text, useWindowDimensions, ScrollView, View } from 'react-native';
+import { StyleSheet, Text, useWindowDimensions, ScrollView, View,Button } from 'react-native';
 import HTML from "react-native-render-html";
+import { useSelector, useDispatch } from 'react-redux'
 
+import JobsCard from '../components/JobsCard'
 
 const JobDetail = ({ route }) => {
 
+    content = route.params[0].contents
+    jobName = route.params[0].name
+    location = route.params[0].location
+    level = route.params[0].level
 
-    content = route.params.contents
-    jobName = route.params.name
-    location = route.params.location
-    level = route.params.level
+    const favList = useSelector((state) => state.counter.favList)
+    const dispatch = useDispatch()
+
+
+    const handleFavourites = () => {
+      
+    //    bu butona basıldığında  alert çıkart (Favorilere eklendi) 
+   
+    //    slice'daki favList'e dispatch ile olduğumuz job'un bilgilerini param olarak gönder ve state'i güncelle
+    //    dispatch(addFavouriteJobs(content,jobName,location,level)) 
+    //    favouritesde selector ile favjobs'u al ve flatlist ile listele
+    }
 
 
     const { width } = useWindowDimensions();
@@ -32,6 +46,8 @@ const JobDetail = ({ route }) => {
 
                 <Text style={styles.detail} >Job Detail</Text>
             </View>
+
+            <Button title='Add to Favourite' onPress={handleFavourites} />
 
             <HTML contentWidth={width} source={{ html: content }} />
 

@@ -34,7 +34,7 @@ const Jobs = ({navigation}) => {
     return(
         <View>
             <Text>jobs</Text>
-            <Button title='go detail' onPress={()=> navigation.navigate('JobDetail')} />
+            <Button title='add fav' onPress={null} />
             <FlatList data={jobs}  renderItem={({item}) => <JobsCard job={item} handlePress={() => NavigateToDetail(item.contents, item.name, item.locations[0].name, item.levels[0].name)} /> } />
         </View>  
         )
