@@ -1,34 +1,29 @@
 import { FlatList, StyleSheet, Text, View ,Button, TextInput} from 'react-native';
-import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment, addFavtoList } from '../store/counterSlice'
-import { useEffect, useState } from 'react';
+import { useSelector,useDispatch } from 'react-redux'
+import JobCardForFavs from '../components/JobCardForFavs';
+import { removeFavouriteJobs } from '../store/counterSlice';
+import { useEffect } from 'react';
 
-const Favourites = () => {
 
-    const [text,setText] = useState('')
+const Favourites = ({navigation}) => {
 
-    const count = useSelector((state) => state.counter.value)
-    const list = useSelector((state) => state.counter.favListTest)
+    useEffect(()=>{
+
+    },[])
+
 
     const dispatch = useDispatch()
 
-    useEffect(()=>{console.log(list),[]})
+    const favJobs = useSelector((state) => state.counter.favList)
+
+    const NavigateToDetail = (contents, name, location, level, id) => navigation.navigate('JobDetail' , {contents,name,location,level, id})
 
     return(
         <View>
-            <Text>Favourites</Text>
-
-            <Button title='inc' onPress={() => dispatch(increment())} />
-            <Button title='decr' onPress={() => dispatch(decrement())} />
-
-            <Text>{count}</Text>
-
-            <TextInput style={{padding:10, borderWidth:2}} onChangeText={setText} />
-            <Button title='add' onPress={() => dispatch(addFavtoList(text))} />
-
-
-            <FlatList keyExtractor={(_, index)=> index.toString()} data={list} renderItem={({item}) => <Text> {item} </Text>} />
- 
+            <FlatList 
+            keyExtractor={(_, index)=> index.toString()} 
+            data={favJobs} 
+            renderItem={({item}) => <JobCardForFavs job={item} handlePress={() => NavigateToDetail(item.content, item.jobName, item.location, item.level, item.id)} handleRemove={(id) => dispatch(removeFavouriteJobs(item.id))} /> }  />
         </View>
         )
 }

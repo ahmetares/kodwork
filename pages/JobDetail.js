@@ -1,27 +1,41 @@
-import { StyleSheet, Text, useWindowDimensions, ScrollView, View,Button } from 'react-native';
+import { useEffect } from 'react';
+import { StyleSheet, Text, useWindowDimensions, ScrollView, View, Button, Alert } from 'react-native';
 import HTML from "react-native-render-html";
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { addFavouriteJobs } from '../store/counterSlice'
 
-import JobsCard from '../components/JobsCard'
 
 const JobDetail = ({ route }) => {
 
-    content = route.params[0].contents
-    jobName = route.params[0].name
-    location = route.params[0].location
-    level = route.params[0].level
+    content = route.params.contents
+    jobName = route.params.name
+    location = route.params.location
+    level = route.params.level
+    id = route.params.id
 
-    const favList = useSelector((state) => state.counter.favList)
     const dispatch = useDispatch()
 
+    const favJobs = useSelector(state => state.counter.favList)
+    
+    const isAddedtoFavs = () => {
+        let flag = false
+        for (let i = 0; i < favJobs.length; i++) {
+            if(favJobs[i].content.includes(content))
+            flag = true
+        }
+        if(flag) return true
+        else return false
+        }
 
+        
     const handleFavourites = () => {
-      
-    //    bu butona basıldığında  alert çıkart (Favorilere eklendi) 
-   
-    //    slice'daki favList'e dispatch ile olduğumuz job'un bilgilerini param olarak gönder ve state'i güncelle
-    //    dispatch(addFavouriteJobs(content,jobName,location,level)) 
-    //    favouritesde selector ile favjobs'u al ve flatlist ile listele
+
+        dispatch(addFavouriteJobs({ jobName, location, level, content, id }))
+        Alert.alert('kodworkk', 'Job Added to Favourites')
+
+        //    slice'daki favList'e (global state) dispatch ile olduğumuz job'un bilgilerini param olarak gönder ve state'i güncelle
+        //    bu butona basıldığında  alert çıkart (Favorilere eklendi) 
+        //    favouritesde selector ile favjobs'u al ve flatlist ile listele
     }
 
 
@@ -47,7 +61,7 @@ const JobDetail = ({ route }) => {
                 <Text style={styles.detail} >Job Detail</Text>
             </View>
 
-            <Button title='Add to Favourite' onPress={handleFavourites} />
+            {!isAddedtoFavs() && <Button title='Add to Favourite' onPress={handleFavourites} />}
 
             <HTML contentWidth={width} source={{ html: content }} />
 
@@ -62,35 +76,35 @@ const styles = StyleSheet.create({
     headerContainer: {
         borderWidth: 0.5,
         backgroundColor: 'lightgrey',
-        flex:1,
+        flex: 1,
     },
 
     jobName: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom:5,
+        marginBottom: 5,
     },
 
-    jobName_container:{
-        marginBottom:5,
-        flexDirection:'row',
-
-    },
-
-    location_container:{
-        marginBottom:5,
-        flexDirection:'row',
-
+    jobName_container: {
+        marginBottom: 5,
+        flexDirection: 'row',
 
     },
 
-    jobName_header:{
-        color:'red',
-        
+    location_container: {
+        marginBottom: 5,
+        flexDirection: 'row',
+
+
     },
 
-    location_header:{
-        color:'red'
+    jobName_header: {
+        color: 'red',
+
+    },
+
+    location_header: {
+        color: 'red'
     },
 
     location: {
@@ -100,10 +114,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
 
-    detail:{
-        marginBottom:5,
+    detail: {
+        marginBottom: 5,
         fontWeight: 'bold',
-        fontSize:20,
-        textAlign:'center'
+        fontSize: 20,
+        textAlign: 'center'
     }
 })

@@ -16,16 +16,13 @@ const Jobs = ({navigation}) => {
 
     }
 
-    const NavigateToDetail = (contents, name, location, level) => navigation.navigate('JobDetail' , [{contents,name,location,level}])
+    const NavigateToDetail = (contents, name, location, level,id) => navigation.navigate('JobDetail' , {contents,name,location,level,id})
 
     
 
-
     useEffect(() => {
             fetchJobs()
-          //  console.log(jobs)
-        },[]
-    )
+        },[])
 
     if(loading){
         return  <Loading/>
@@ -33,9 +30,7 @@ const Jobs = ({navigation}) => {
 
     return(
         <View>
-            <Text>jobs</Text>
-            <Button title='add fav' onPress={null} />
-            <FlatList data={jobs}  renderItem={({item}) => <JobsCard job={item} handlePress={() => NavigateToDetail(item.contents, item.name, item.locations[0].name, item.levels[0].name)} /> } />
+           <FlatList data={jobs}  renderItem={({item}) => <JobsCard job={item} handlePress={() => NavigateToDetail(item.contents, item.name, item.locations[0].name, item.levels[0].name,item.id)} /> } />
         </View>  
         )
     
